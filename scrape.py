@@ -163,27 +163,20 @@ for poke in pokemon:
     page = requests.get(URL)
 
     s = BeautifulSoup(page.content, "html.parser")
+    curr = dict()
 
     results = s.find(id="main")
     maxStat = results.find_all("td", class_="cell-num")
 
-    x = "{maxHealth : "
-    i = 2
-    x += maxStat[i].string.strip()+", maxAttack : "
-    i += 3
-    x += maxStat[i].string.strip()+", maxDefense : "
-    i += 3
-    x += maxStat[i].string.strip()+", maxSpAtk : "
-    i += 3
-    x += maxStat[i].string.strip()+", maxSpDef : "
-    i += 3
-    x += maxStat[i].string.strip()+", Speed : "
-    i += 3
-    x += maxStat[i].string.strip()+"}"
-    
-    print(x)
 
-    output.append(x)
+    curr["maxHealth"] = int(maxStat[2].string.strip())
+    curr["maxAttack"] = int(maxStat[5].string.strip())
+    curr["maxDefense"] = int(maxStat[8].string.strip())
+    curr["maxSpAtk"] = int(maxStat[11].string.strip())
+    curr["maxSpDef"] = int(maxStat[14].string.strip())
+    curr["maxSpeed"] = int(maxStat[17].string.strip())
+
+    output.append(curr)
 
 filename = "maxStats.json"
 f = open(filename, "w")
