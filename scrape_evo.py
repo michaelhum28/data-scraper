@@ -153,37 +153,56 @@ pokemon = [
     "Dragonair",
     "Dragonite",
     "Mewtwo",
-    "Mew"
+    "Mew",
 ]
 
-output=[]
+output = []
 
 for poke in pokemon:
     URL = "https://pokemondb.net/pokedex/" + poke.lower()
     page = requests.get(URL)
 
     s = BeautifulSoup(page.content, "html.parser")
-    curr = dict()
-    i=1
+    curr = []
+    # d = dict()
+    i = 0
+    res = []
 
     results = s.find(id="main")
 
-    while (i<3):
+    while i < 3:
         try:
             evo_main = results.find("div", class_="infocard-list-evo")
             evo = evo_main.find_all("a", class_="ent-name")
 
-            curr["evolutions"] = evo[i].string.strip()
-                
-            i+=1
-
-            output.append(curr)
-
+            if evo[i].string.strip() in pokemon:
+                curr.append(evo[i].string.strip())
+            i += 1
         except:
+            res=[]
+            # d[pokemon.index(poke)+1] = []
             break
-        print(curr)
 
+    
+    if(poke in curr):
+        res=curr[curr.index(poke)+1:3]
+
+        for i in range(len(res)):
+            res[i] = "{:03d}".format(pokemon.index(res[i])+1)
+            
+
+        # d["{:03d}".format(pokemon.index(poke)+1)]=res
+
+    if curr not in output or res == []:
+        output.append(res)
+
+    
+
+        print(output)
+        count+=1
+        
+    
 
 filename = "evolutions.json"
 f = open(filename, "w")
-json.dump(output,f)
+json.dump(output, f)
