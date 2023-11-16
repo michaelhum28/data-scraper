@@ -199,7 +199,6 @@ for poke in pokemon:
     
 
         print(output)
-        count+=1
         
     
 
