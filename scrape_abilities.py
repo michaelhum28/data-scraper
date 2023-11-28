@@ -155,3 +155,29 @@ pokemon = [
     "Mewtwo",
     "Mew",
 ]
+
+
+output = []
+
+for poke in pokemon:
+    URL = "https://pokemondb.net/pokedex/" + poke.lower()
+    page = requests.get(URL)
+    s = BeautifulSoup(page.content, "html.parser")
+
+    results = s.find(id="main")
+    abilities = results.find("table", class_="vitals-table")
+
+    
+    ability = abilities.find("span", class_="text-muted")
+    ability_links = ability.find_all("a")
+    
+    # Extracting text content from each ability link and appending to output
+    abilities_list = [a.text.strip() for a in ability_links]
+    print(abilities_list)
+    output.append(abilities_list)
+        
+    
+
+filename = "abilities.json"
+f = open(filename, "w")
+json.dump(output, f)
